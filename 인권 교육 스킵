@@ -1,0 +1,54 @@
+const 초 = 10000;  // 영상 길이보다 큰 초를 설정
+const url = document.getElementById('iframeid').src;
+const urlParts = url.split('&');
+const startUrl = `${urlParts[0].split('=')[0]}=${초}`;
+const endUrl = `${urlParts[1].split('=')[0]}=${초}`;
+const magicUrl = [startUrl, endUrl, ...urlParts.slice(2)].join('&');
+document.getElementById('iframeid').src = magicUrl;
+
+
+평가 넘기는 거
+
+// SetExamAfter 함수 호출
+if (typeof SetExamAfter === "function") {
+    SetExamAfter();
+} else {
+    console.error("SetExamAfter function is not defined.");
+}
+
+// answers 변수 재선언 문제 해결
+if (typeof answers === 'undefined') {
+    var answers = Array.from({length: questionCountInExam}, (x, i) => {
+        const elem = document.getElementById("qustionCorrectNo_" + i);
+        return elem ? elem.value : undefined;  // 요소가 없을 경우 undefined 반환
+    });
+} else {
+    answers = Array.from({length: questionCountInExam}, (x, i) => {
+        const elem = document.getElementById("qustionCorrectNo_" + i);
+        return elem ? elem.value : undefined;
+    });
+}
+
+// SetExamBefore 함수 호출
+if (typeof SetExamBefore === "function") {
+    SetExamBefore();
+} else {
+    console.error("SetExamBefore function is not defined.");
+}
+
+// 각 질문에 대한 답변 선택
+for (let i = 0; i < questionCountInExam; i++) {
+    const ls = document.getElementsByName(`qustionAnswerList[${i}].Answer`);
+    console.log(ls);
+    if (ls && ls.length > answers[i] - 1) {
+        ls[answers[i] - 1].checked = true;
+    }
+}
+
+// 제출 버튼 클릭
+const btnSave = document.getElementById("Exam_btnSave");
+if (btnSave) {
+    btnSave.click();
+} else {
+    console.error("Exam_btnSave button not found.");
+}
